@@ -32,7 +32,7 @@ uniform Light light;
 
 
 uniform bool blinn;
-
+uniform bool plain;
 void main()
 {
     // ambient
@@ -59,8 +59,13 @@ void main()
         vec3 reflectDir = reflect(-lightDir, norm);
         spec = pow(max(dot(viewDir, reflectDir), 0.0), (material.shininess/4));
     }
-
-    vec3 specular = light.specular * spec * texture(material.specular, TexCoords).rgb;  
+    vec3 specular = vec3(0.0);
+    if(plain){
+      specular = vec3(0.4) * spec;  
+    }
+    else{
+     specular = light.specular * spec * texture(material.specular, TexCoords).rgb;  
+    }
     
     // spotlight (soft edges)
     float theta = dot(lightDir, normalize(-light.direction)); 
